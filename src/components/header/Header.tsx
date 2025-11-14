@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import styles from './Header.module.css';
+import { useState, useEffect, useRef } from "react";
+import styles from "./Header.module.css";
 
 interface NavLink {
   label: string;
@@ -62,6 +62,7 @@ const Header = () => {
     { label: "Contact", key: "contact", path: "/contact" },
   ];
 
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -73,19 +74,20 @@ const Header = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Lock scroll when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
       setOpenDropdown(null);
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
 
@@ -105,12 +107,13 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
+        {/* Logo */}
         <div className={styles.logoWrapper}>
           <a href="/" className={styles.logoLink} aria-label="Reenses Pharmacy Home">
             <div className={styles.logoImageContainer}>
-              <img 
-                src="/logo.png" 
-                alt="Reenses Pharmacy Logo" 
+              <img
+                src="/logo.png"
+                alt="Reenses Pharmacy Logo"
                 className={styles.logoImage}
               />
             </div>
@@ -122,22 +125,28 @@ const Header = () => {
           </a>
         </div>
 
+        {/* DESKTOP & MOBILE NAV */}
         <nav className={styles.nav} aria-label="Main navigation">
-          <ul className={`${styles.navList} ${isMobileMenuOpen ? styles.navListOpen : ''}`}>
+          <ul
+            className={`${styles.navList} ${
+              isMobileMenuOpen ? styles.navListOpen : ""
+            }`}
+          >
             {navItems.map((item) => (
               <li
                 key={item.key}
-                className={`${styles.navItem} ${item.links ? styles.hasDropdown : ''}`}
-               ref={(el) => {
-                    dropdownRefs.current[item.key] = el;
-                  }}
-
+                className={`${styles.navItem} ${
+                  item.links ? styles.hasDropdown : ""
+                }`}
+                ref={(el) => {
+                  dropdownRefs.current[item.key] = el;
+                }}
               >
                 {item.links ? (
                   <>
                     <button
                       className={`${styles.navLink} ${styles.dropdownToggle} ${
-                        openDropdown === item.key ? styles.dropdownActive : ''
+                        openDropdown === item.key ? styles.dropdownActive : ""
                       }`}
                       onClick={() => toggleDropdown(item.key)}
                       aria-expanded={openDropdown === item.key}
@@ -149,9 +158,10 @@ const Header = () => {
                         ▾
                       </span>
                     </button>
+
                     <ul
                       className={`${styles.dropdownMenu} ${
-                        openDropdown === item.key ? styles.dropdownMenuOpen : ''
+                        openDropdown === item.key ? styles.dropdownMenuOpen : ""
                       }`}
                     >
                       {item.links.map((link) => (
@@ -181,21 +191,22 @@ const Header = () => {
           </ul>
         </nav>
 
+        {/* CART */}
         <div className={styles.cartWrapper}>
           <a href="/cart" className={styles.cartLink} aria-label="Shopping Cart">
-            <svg 
-              className={styles.cartIcon} 
-              viewBox="0 0 24 24" 
-              fill="none" 
+            <svg
+              className={styles.cartIcon}
+              viewBox="0 0 24 24"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <path 
-                d="M9 2L7.17 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4H16.83L15 2H9ZM9 4H15L16.83 6H21V18H3V6H7.17L9 4Z" 
+              <path
+                d="M9 2L7.17 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4H16.83L15 2H9ZM9 4H15L16.83 6H21V18H3V6H7.17L9 4Z"
                 fill="currentColor"
               />
-              <path 
-                d="M7 10V12C7 13.66 8.34 15 10 15H14C15.66 15 17 13.66 17 12V10H15V12C15 12.55 14.55 13 14 13H10C9.45 13 9 12.55 9 12V10H7Z" 
+              <path
+                d="M7 10V12C7 13.66 8.34 15 10 15H14C15.66 15 17 13.66 17 12V10H15V12C15 12.55 14.55 13 14 13H10C9.45 13 9 12.55 9 12V10H7Z"
                 fill="currentColor"
               />
             </svg>
@@ -203,8 +214,11 @@ const Header = () => {
           </a>
         </div>
 
+        {/* HAMBURGER BUTTON */}
         <button
-          className={`${styles.hamburger} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}
+          className={`${styles.hamburger} ${
+            isMobileMenuOpen ? styles.hamburgerOpen : ""
+          }`}
           onClick={toggleMobileMenu}
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileMenuOpen}
@@ -216,13 +230,7 @@ const Header = () => {
         </button>
       </div>
 
-      {isMobileMenuOpen && (
-        <div
-          className={styles.overlay}
-          onClick={toggleMobileMenu}
-          aria-hidden="true"
-        />
-      )}
+
     </header>
   );
 };

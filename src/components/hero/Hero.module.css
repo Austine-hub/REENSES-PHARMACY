@@ -37,6 +37,14 @@
   .sidebar {
     display: none;
   }
+
+  /* Hero Section Container */
+.heroSection {
+ 
+  top: 10px;/* 80px header + 20px gap */
+  
+;
+}
 }
 
 .navList {
@@ -604,5 +612,27 @@ html {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================= */
+/* Mobile + Tablet Adjustments   */
+/* ============================= */
+
+@media (max-width: 1024px) {
+  .heroSection {
+    padding-top: 140px; /* header ~100px + 20px gap */
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding-top: 100px; /* header ~120px + 20px gap */
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding-top: 80px; /* header ~140px + small gap */
   }
 }
