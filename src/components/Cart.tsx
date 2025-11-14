@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import axios from "axios";
-import { 
-  Trash2, 
-  ShoppingCart, 
-  AlertCircle, 
-  Minus, 
+import {
+  Trash2,
+  ShoppingCart,
+  AlertCircle,
+  Minus,
   Plus,
   MessageCircle,
   ArrowRight,
@@ -16,11 +16,11 @@ import {
   Clock,
   X,
   Lock,
-  FileText
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
 import { handleWhatsAppOrder } from "../utils/whatsappOrder";
 import styles from "./Cart.module.css";
 
@@ -42,12 +42,12 @@ type QuantityInputProps = {
   max?: number;
 };
 
-const QuantityInput: React.FC<QuantityInputProps> = ({ 
-  id, 
-  value, 
-  onChange, 
+const QuantityInput: React.FC<QuantityInputProps> = ({
+  id,
+  value,
+  onChange,
   disabled,
-  max = 99 
+  max = 99,
 }) => {
   const [local, setLocal] = useState(String(value));
 
@@ -93,40 +93,21 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
 // Animation variants
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.04 }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
 };
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring" as const, stiffness: 400, damping: 28 }
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    transition: { duration: 0.2 }
-  }
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 400, damping: 28 } },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
 };
 
 // Main Cart Component
 const Cart: React.FC = () => {
   const navigate = useNavigate();
-  
-  const {
-    cartItems = [],
-    removeFromCart,
-    clearCart,
-    getCartTotal = () => 0,
-    getTotalItems = () => 0,
-    updateQuantity,
-  } = useCart();
-  
+  const { cartItems, removeFromCart, clearCart, getCartTotal, getTotalItems, updateQuantity } = useCart();
   const { isAuthenticated } = useAuth();
+
   const [isClearing, setIsClearing] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
@@ -136,26 +117,18 @@ const Cart: React.FC = () => {
   const totalItems = useMemo(() => getTotalItems(), [getTotalItems]);
   const shipping = subtotal >= 3000 ? 0 : 250;
   const total = subtotal + shipping;
-  const savings = useMemo(() => {
-    return cartItems.reduce((acc, item) => {
-      if (item.originalPrice) {
-        return acc + (item.originalPrice - item.price) * item.quantity;
-      }
-      return acc;
-    }, 0);
-  }, [cartItems]);
+  const savings = useMemo(
+    () => cartItems.reduce((acc, item) => (item.originalPrice ? acc + (item.originalPrice - item.price) * item.quantity : acc), 0),
+    [cartItems]
+  );
 
   const quantityControlsEnabled = Boolean(updateQuantity);
 
   // Handlers
   const handleAdjustQty = useCallback(
     (id: string, qty: number) => {
-      if (!quantityControlsEnabled) {
-        toast.info("Quantity editing not available");
-        return;
-      }
-      const safeQty = Math.max(1, Math.trunc(qty));
-      updateQuantity?.(id, safeQty);
+      if (!quantityControlsEnabled) return toast.info("Quantity editing not available");
+      updateQuantity?.(id, Math.max(1, Math.trunc(qty)));
       toast.success("Quantity updated", { duration: 1500 });
     },
     [updateQuantity, quantityControlsEnabled]
@@ -171,110 +144,63 @@ const Cart: React.FC = () => {
 
   const handleClear = useCallback(async () => {
     if (!cartItems.length || isClearing) return;
-    
+    if (!window.confirm("Clear all items from your cart?")) return;
     setIsClearing(true);
-    const ok = window.confirm("Clear all items from your cart? This cannot be undone.");
-    
-    if (ok) {
-      clearCart();
-      toast.success("Cart cleared");
-    }
-    
+    clearCart();
+    toast.success("Cart cleared");
     setIsClearing(false);
-  }, [clearCart, cartItems.length, isClearing]);
+  }, [cartItems.length, clearCart, isClearing]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      
-      if (file.size > maxSize) {
-        toast.error("File size must be less than 5MB");
-        return;
-      }
-      
-      setPrescriptionFile(file);
-      toast.success("Prescription file selected");
-    }
-  };
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return toast.error("File size must be less than 5MB");
+    setPrescriptionFile(file);
+    toast.success("Prescription file selected");
+  }, []);
 
   const handleCheckout = useCallback(async () => {
-    if (!cartItems.length) {
-      toast.info("Your cart is empty");
-      return;
-    }
-
-    if (!isAuthenticated) {
-      toast.error("Please log in to checkout", {
-        action: {
-          label: "Login",
-          onClick: () => navigate("/login"),
-        },
-      });
-      return;
-    }
+    if (!cartItems.length) return toast.info("Your cart is empty");
+    if (!isAuthenticated)
+      return toast.error("Please log in to checkout", { action: { label: "Login", onClick: () => navigate("/login") } });
 
     setIsPlacingOrder(true);
 
     try {
-      // Create order
       const orderRes = await axios.post(
         "/api/orders",
-        {
-          cartItems,
-          shipping,
-          total,
-        },
+        { cartItems, shipping, total },
         { withCredentials: true }
       );
-
       const orderId = orderRes.data.orderId;
       toast.success(`Order #${orderId} created successfully`);
 
-      // Upload prescription if file is selected
       if (prescriptionFile) {
         const formData = new FormData();
         formData.append("file", prescriptionFile);
         formData.append("orderId", orderId);
-
         await axios.post("/api/prescriptions", formData, {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         });
-
         toast.success("Prescription uploaded successfully");
       }
 
-      // Navigate to success page
-      navigate("/checkout-success");
-      
-      // Clear cart
       clearCart();
+      navigate("/checkout-success");
     } catch (err: any) {
-      const errorMessage = err?.response?.data?.message || "Checkout failed. Please try again.";
-      toast.error(errorMessage);
-      console.error("Checkout error:", err);
+      toast.error(err?.response?.data?.message || "Checkout failed. Please try again.");
+      console.error(err);
     } finally {
       setIsPlacingOrder(false);
     }
   }, [cartItems, isAuthenticated, navigate, shipping, total, prescriptionFile, clearCart]);
 
   const handleWhatsAppClick = useCallback(() => {
-    if (!cartItems.length) {
-      toast.info("Add items to your cart first");
-      return;
-    }
-
-    const success = handleWhatsAppOrder(cartItems, subtotal);
-    
-    if (success) {
-      toast.success("Opening WhatsApp...");
-    } else {
-      toast.error("Failed to open WhatsApp");
-    }
+    if (!cartItems.length) return toast.info("Add items to your cart first");
+    handleWhatsAppOrder(cartItems, subtotal) ? toast.success("Opening WhatsApp...") : toast.error("Failed to open WhatsApp");
   }, [cartItems, subtotal]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -286,103 +212,56 @@ const Cart: React.FC = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [handleCheckout]);
 
-  // Empty state
-  if (!cartItems || cartItems.length === 0) {
+  // Empty cart
+  if (!cartItems?.length)
     return (
       <div className={styles.emptyState}>
-        <motion.div 
-          className={styles.emptyContent}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
+        <motion.div className={styles.emptyContent} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <div className={styles.emptyIconWrapper}>
             <ShoppingCart size={56} strokeWidth={1.5} />
           </div>
           <h1 className={styles.emptyTitle}>Your cart is empty</h1>
-          <p className={styles.emptyText}>
-            Discover quality healthcare products and add them to your cart
-          </p>
-          <button 
-            className={styles.emptyButton}
-            onClick={() => navigate("/")}
-            aria-label="Start shopping"
-          >
-            Start Shopping
-            <ArrowRight size={20} />
+          <p className={styles.emptyText}>Discover quality Reenses products and add them to your cart</p>
+          <button className={styles.emptyButton} onClick={() => navigate("/")} aria-label="Start shopping">
+            Start Shopping <ArrowRight size={20} />
           </button>
         </motion.div>
       </div>
     );
-  }
 
   return (
     <div className={styles.cartWrapper}>
       <div className={styles.cartContainer}>
-        {/* Header */}
         <header className={styles.cartHeader}>
           <div className={styles.headerLeft}>
             <h1 className={styles.cartTitle}>Shopping Cart</h1>
             <span className={styles.itemCount}>
-              {totalItems} {totalItems === 1 ? 'item' : 'items'}
+              {totalItems} {totalItems === 1 ? "item" : "items"}
             </span>
           </div>
-          <button 
-            className={styles.continueBtn}
-            onClick={() => navigate("/")}
-            aria-label="Continue shopping"
-          >
+          <button className={styles.continueBtn} onClick={() => navigate("/")} aria-label="Continue shopping">
             Continue Shopping
           </button>
         </header>
 
         <div className={styles.cartLayout}>
-          {/* Cart Items Section */}
-          <motion.section 
-            className={styles.cartItems}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+          <motion.section className={styles.cartItems} variants={containerVariants} initial="hidden" animate="visible">
             <AnimatePresence mode="popLayout">
               {cartItems.map((item) => (
-                <motion.article
-                  key={item.id}
-                  layout
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className={styles.cartItem}
-                >
+                <motion.article key={item.id} layout variants={itemVariants} exit="exit" className={styles.cartItem}>
                   <div className={styles.itemImage}>
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      loading="lazy"
-                    />
-                    {item.discount && (
-                      <span className={styles.badge}>-{item.discount}%</span>
-                    )}
+                    <img src={item.image} alt={item.name} loading="lazy" />
+                    {item.discount && <span className={styles.badge}>-{item.discount}%</span>}
                   </div>
 
                   <div className={styles.itemDetails}>
                     <div className={styles.itemTop}>
                       <div>
                         <h2 className={styles.itemName}>{item.name}</h2>
-                        {item.category && (
-                          <p className={styles.itemCategory}>{item.category}</p>
-                        )}
-                        {item.variation && (
-                          <p className={styles.itemVariation}>Size: {item.variation}</p>
-                        )}
+                        {item.category && <p className={styles.itemCategory}>{item.category}</p>}
+                        {item.variation && <p className={styles.itemVariation}>Size: {item.variation}</p>}
                       </div>
-                      <button
-                        type="button"
-                        className={styles.removeBtn}
-                        onClick={() => handleRemove(item.id, item.name)}
-                        aria-label={`Remove ${item.name}`}
-                      >
+                      <button type="button" className={styles.removeBtn} onClick={() => handleRemove(item.id, item.name)} aria-label={`Remove ${item.name}`}>
                         <X size={20} />
                       </button>
                     </div>
@@ -397,55 +276,29 @@ const Cart: React.FC = () => {
                     <div className={styles.itemBottom}>
                       <div className={styles.priceGroup}>
                         <span className={styles.price}>{formatPrice(item.price)}</span>
-                        {item.originalPrice && (
-                          <span className={styles.oldPrice}>{formatPrice(item.originalPrice)}</span>
-                        )}
+                        {item.originalPrice && <span className={styles.oldPrice}>{formatPrice(item.originalPrice)}</span>}
                       </div>
 
                       <div className={styles.quantityGroup}>
-                        <button
-                          type="button"
-                          className={styles.qtyBtn}
-                          onClick={() => handleAdjustQty(item.id, item.quantity - 1)}
-                          disabled={!quantityControlsEnabled || item.quantity <= 1}
-                          aria-label="Decrease quantity"
-                        >
+                        <button type="button" className={styles.qtyBtn} onClick={() => handleAdjustQty(item.id, item.quantity - 1)} disabled={!quantityControlsEnabled || item.quantity <= 1} aria-label="Decrease quantity">
                           <Minus size={16} />
                         </button>
 
-                        <QuantityInput
-                          id={`qty-${item.id}`}
-                          value={item.quantity}
-                          onChange={(n) => handleAdjustQty(item.id, n)}
-                          disabled={!quantityControlsEnabled}
-                        />
+                        <QuantityInput id={`qty-${item.id}`} value={item.quantity} onChange={(n) => handleAdjustQty(item.id, n)} disabled={!quantityControlsEnabled} />
 
-                        <button
-                          type="button"
-                          className={styles.qtyBtn}
-                          onClick={() => handleAdjustQty(item.id, item.quantity + 1)}
-                          disabled={!quantityControlsEnabled}
-                          aria-label="Increase quantity"
-                        >
+                        <button type="button" className={styles.qtyBtn} onClick={() => handleAdjustQty(item.id, item.quantity + 1)} disabled={!quantityControlsEnabled} aria-label="Increase quantity">
                           <Plus size={16} />
                         </button>
                       </div>
 
-                      <div className={styles.itemTotal}>
-                        {formatPrice(item.price * item.quantity)}
-                      </div>
+                      <div className={styles.itemTotal}>{formatPrice(item.price * item.quantity)}</div>
                     </div>
                   </div>
                 </motion.article>
               ))}
             </AnimatePresence>
 
-            <button
-              className={styles.clearBtn}
-              onClick={handleClear}
-              disabled={isClearing}
-              aria-label="Clear all items from cart"
-            >
+            <button className={styles.clearBtn} onClick={handleClear} disabled={isClearing} aria-label="Clear all items from cart">
               <Trash2 size={18} />
               Clear Cart
             </button>
@@ -454,12 +307,7 @@ const Cart: React.FC = () => {
           {/* Sidebar */}
           <aside className={styles.sidebar}>
             {/* Trust Indicators */}
-            <motion.div 
-              className={styles.trustBar}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
+            <motion.div className={styles.trustBar} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               <div className={styles.trustItem}>
                 <ShieldCheck size={18} />
                 <span>Secure Checkout</span>
@@ -475,12 +323,7 @@ const Cart: React.FC = () => {
             </motion.div>
 
             {/* Order Summary */}
-            <motion.div 
-              className={styles.summary}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
+            <motion.div className={styles.summary} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <h2 className={styles.summaryTitle}>Order Summary</h2>
 
               <div className={styles.summaryLines}>
@@ -498,19 +341,14 @@ const Cart: React.FC = () => {
 
                 <div className={styles.line}>
                   <span>Shipping</span>
-                  <span className={shipping === 0 ? styles.free : ''}>
-                    {shipping === 0 ? 'FREE' : formatPrice(shipping)}
-                  </span>
+                  <span className={shipping === 0 ? styles.free : ""}>{shipping === 0 ? "FREE" : formatPrice(shipping)}</span>
                 </div>
 
                 {subtotal < 3000 && (
                   <div className={styles.shippingBar}>
                     <p>Add {formatPrice(3000 - subtotal)} more for free shipping</p>
                     <div className={styles.progress}>
-                      <div 
-                        className={styles.progressFill}
-                        style={{ width: `${Math.min((subtotal / 3000) * 100, 100)}%` }}
-                      />
+                      <div className={styles.progressFill} style={{ width: `${Math.min((subtotal / 3000) * 100, 100)}%` }} />
                     </div>
                   </div>
                 )}
@@ -528,44 +366,26 @@ const Cart: React.FC = () => {
                   <span>Upload Prescription</span>
                   <span className={styles.optional}>(optional)</span>
                 </label>
-                <input
-                  type="file"
-                  id="prescription"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  onChange={handleFileChange}
-                  className={styles.uploadInput}
-                  aria-label="Upload prescription file"
-                />
+                <input type="file" id="prescription" accept=".jpg,.jpeg,.png,.pdf" onChange={handleFileChange} className={styles.uploadInput} aria-label="Upload prescription file" />
                 {prescriptionFile && (
                   <div className={styles.fileSelected}>
                     <FileText size={14} />
                     <span>{prescriptionFile.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => setPrescriptionFile(null)}
-                      aria-label="Remove prescription file"
-                    >
+                    <button type="button" onClick={() => setPrescriptionFile(null)} aria-label="Remove prescription file">
                       <X size={14} />
                     </button>
                   </div>
                 )}
               </div>
 
-              <button
-                className={styles.checkoutBtn}
-                onClick={handleCheckout}
-                disabled={isPlacingOrder}
-                aria-label="Proceed to secure checkout"
-              >
+              <button className={styles.checkoutBtn} onClick={handleCheckout} disabled={isPlacingOrder} aria-label="Proceed to secure checkout">
                 {isPlacingOrder ? (
                   <>
-                    <span className={styles.spinner}></span>
-                    Processing...
+                    <span className={styles.spinner}></span> Processing...
                   </>
                 ) : (
                   <>
-                    <Lock size={18} />
-                    Secure Checkout
+                    <Lock size={18} /> Secure Checkout
                   </>
                 )}
               </button>
@@ -574,12 +394,7 @@ const Cart: React.FC = () => {
             </motion.div>
 
             {/* WhatsApp Option */}
-            <motion.div 
-              className={styles.whatsapp}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
+            <motion.div className={styles.whatsapp} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
               <div className={styles.whatsappTop}>
                 <MessageCircle size={22} />
                 <div>
@@ -587,14 +402,8 @@ const Cart: React.FC = () => {
                   <p>Get instant assistance</p>
                 </div>
               </div>
-              
-              <button
-                className={styles.whatsappBtn}
-                onClick={handleWhatsAppClick}
-                aria-label="Continue order on WhatsApp"
-              >
-                Continue on WhatsApp
-                <ArrowRight size={18} />
+              <button className={styles.whatsappBtn} onClick={handleWhatsAppClick} aria-label="Continue order on WhatsApp">
+                Continue on WhatsApp <ArrowRight size={18} />
               </button>
             </motion.div>
           </aside>

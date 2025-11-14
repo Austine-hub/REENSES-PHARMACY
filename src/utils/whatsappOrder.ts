@@ -10,7 +10,7 @@ const WHATSAPP_CONFIG = {
   phoneNumber: "254796787207",
 
   greeting: "Hello! 👋",
-  storeName: "Healthfield Pharmacy",
+  storeName: "Reenses Pharmacy",
 } as const;
 
 /* ---------------------------------------------------------------

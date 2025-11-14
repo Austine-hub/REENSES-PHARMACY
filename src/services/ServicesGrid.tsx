@@ -1,6 +1,14 @@
 import React from 'react';
 import styles from './ServicesGrid.module.css';
 
+// Import images - replace with your actual image paths
+import pic1  from '../assets/products/WomenHealth/women1.png';
+import pic2  from '../assets/mens/mens1.png';
+import pic3  from '../assets/mens/compounding.png';
+import pic4  from '../assets/mens/delivery.png';
+import pic5  from '../assets/mens/dermatology.png';
+import pic6  from '../assets/mens/pain.png';
+import pic7  from '../assets/mens/peads.png';
 // Icon components
 const WomenHealthIcon = () => (
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -36,17 +44,6 @@ const DermatologyIcon = () => (
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M12 2L2 7l10 5 10-5-10-5z" />
     <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-  </svg>
-);
-
-const PetHealthIcon = () => (
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="4" r="2" />
-    <circle cx="18" cy="8" r="2" />
-    <circle cx="4" cy="8" r="2" />
-    <circle cx="6" cy="14" r="2" />
-    <circle cx="16" cy="14" r="2" />
-    <path d="M11 16c-2 0-4-1-4-3s2-3 4-3 4 1 4 3-2 3-4 3z" />
   </svg>
 );
 
@@ -93,42 +90,38 @@ const ServicesGrid: React.FC = () => {
     {
       icon: <WomenHealthIcon />,
       title: "Women's Health - Hormone Consultations",
-      backgroundImage: '/images/womens-health.jpg'
+      backgroundImage: pic1,
     },
     {
       icon: <MenHealthIcon />,
       title: "Men's Health",
-      backgroundImage: '/images/mens-health.jpg'
+      backgroundImage: pic2,
     },
     {
       icon: <CompoundingIcon />,
       title: "Compounding",
-      backgroundImage: '/images/compounding.jpg'
+      backgroundImage: pic3
     },
     {
       icon: <DeliveryIcon />,
       title: "Prescription Delivery & Mail",
-      backgroundImage: '/images/delivery.jpg'
+      backgroundImage:pic4,
     },
     {
       icon: <DermatologyIcon />,
       title: "Dermatology",
-      backgroundImage: '/images/dermatology.jpg'
+      backgroundImage: pic5,
     },
-    {
-      icon: <PetHealthIcon />,
-      title: "Pet Health",
-      backgroundImage: '/images/pet-health.jpg'
-    },
+
     {
       icon: <PainManagementIcon />,
       title: "Pain Management",
-      backgroundImage: '/images/pain-management.jpg'
+      backgroundImage: pic6,
     },
     {
       icon: <PediatricsIcon />,
       title: "Pediatrics",
-      backgroundImage: '/images/pediatrics.jpg'
+      backgroundImage: pic7
     }
   ];
 
