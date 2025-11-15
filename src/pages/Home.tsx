@@ -36,13 +36,13 @@ const Home: FC = () => {
   return (
     <main className="p-8 text-center">
       <Hero />
+      <Shop/>
       <ProductCarousel />
      
      
 
       <Suspense fallback={<LoadingFallback />}>
         <DiscountCards/>
-        <Shop/>
         <ServiceGrid />
         <ShopByCategory />
         <Offers1 />
