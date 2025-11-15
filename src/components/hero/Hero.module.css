@@ -135,6 +135,16 @@
   }
 }
 
+/* Hide Hero on mobile and small screens */
+@media (max-width: 992px) {
+ .heroSection{
+    display: none;
+  }
+}
+
+
+
+
 /* Hero Carousel */
 .heroCarousel {
   flex: 1;

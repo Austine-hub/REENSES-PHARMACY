@@ -288,6 +288,7 @@ const App: FC = () => {
                 <Route path="/respiratory/:id" element={<RespiratoryDetails />} />
                 <Route path="/htn-product/:id" element={<HTNDetails />} />
                 <Route path="/new-beauty/:id" element={<Offers1D/>} />
+                <Route path="/offers-wrapper" element={<OffersWrapper/>} />
 
                 {/* ShopByCategory */}
                 <Route path="/category/general" element={<ProductCarousel/>} />

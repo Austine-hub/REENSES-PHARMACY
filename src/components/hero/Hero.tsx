@@ -36,7 +36,9 @@ interface CarouselSlide {
   description: string;
   buttonText: string;
   image: string;
+   link: string;   // ⭐ Add this
 }
+
 
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -56,35 +58,45 @@ const HeroSection: React.FC = () => {
     { icon: <FaShieldAlt />, label: 'Protection', path: '/protection' },
   ];
 
-  const carouselSlides: CarouselSlide[] = [
-    {
-      id: 1,
-      badge: 'Exclusive Discounts',
-      title: 'Magical Moments Awaits You at Every Corner',
-      subtitle: '',
-      description: 'We Turn Ordinary Days Into Magical Adventures with Our Exciting Collection of Toys and Stylish Kidswear',
-      buttonText: 'View Products',
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80'
-    },
-    {
-      id: 2,
-      badge: 'New Arrivals',
-      title: 'Your Health is Our Priority',
-      subtitle: '',
-      description: 'Discover Premium Healthcare Products and Expert Medical Guidance for Your Wellbeing',
-      buttonText: 'Shop Now',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80'
-    },
-    {
-      id: 3,
-      badge: 'Special Offer',
-      title: 'Quality Care You Can Trust',
-      subtitle: '',
-      description: 'Professional Medical Solutions and Personalized Healthcare Services at Your Fingertips',
-      buttonText: 'Explore More',
-      image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=80'
-    }
-  ];
+const carouselSlides: CarouselSlide[] = [
+  {
+    id: 1,
+    badge: 'Exclusive Discounts',
+    title: 'Magical Moments Awaits You at Every Corner',
+    subtitle: '',
+    description:
+      'We Turn Ordinary Days Into Magical Adventures with Our Exciting Collection of Toys and Stylish Kidswear',
+    buttonText: 'View Products',
+    image:
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80',
+    link: '/offers-wrapper'          // ⭐ Add this
+  },
+  {
+    id: 2,
+    badge: 'New Arrivals',
+    title: 'Your Health is Our Priority',
+    subtitle: '',
+    description:
+      'Discover Premium Healthcare Products and Expert Medical Guidance for Your Wellbeing',
+    buttonText: 'Shop Now',
+    image:
+      'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    link: '/health-products'   // ⭐ Add this
+  },
+  {
+    id: 3,
+    badge: 'Special Offer',
+    title: 'Quality Care You Can Trust',
+    subtitle: '',
+    description:
+      'Professional Medical Solutions and Personalized Healthcare Services at Your Fingertips',
+    buttonText: 'Explore More',
+    image:
+      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=80',
+    link: '/medical-services'  // ⭐ Add this
+  }
+];
+
 
   const features = [
     {
@@ -177,9 +189,12 @@ const HeroSection: React.FC = () => {
                       <span className={styles.badge}>{slide.badge}</span>
                       <h1 className={styles.heroTitle}>{slide.title}</h1>
                       <p className={styles.heroDescription}>{slide.description}</p>
-                      <button className={styles.ctaButton}>
+
+
+                      <Link to={slide.link}  className={styles.ctaButton}>
                         {slide.buttonText}
-                      </button>
+                      </Link>
+
                     </div>
                     <div className={styles.imageContent}>
                       <img 

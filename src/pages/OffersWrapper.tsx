@@ -24,29 +24,25 @@ const OffersWrapper = () => {
      {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
-        </h2>
+         </h2>
         <Offers1/>
       </section>
 
            {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
         </h2>
       </section>
 
            {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
         </h2>
         <MensHealth/>
       </section>
            {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
         </h2>
         <WomenHealthShop/>
       </section>
@@ -55,7 +51,6 @@ const OffersWrapper = () => {
        {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
         </h2>
         <Offers2/>
       </section>
@@ -64,7 +59,6 @@ const OffersWrapper = () => {
          {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Sexual & Reproductive Health Section
         </h2>
         <Offers/>
       </section>
@@ -72,7 +66,7 @@ const OffersWrapper = () => {
             {/* Best Selling Section */}
       <section aria-labelledby="best-selling" className={styles.section}>
         <h2 id="best-selling" className={styles.title}>
-          Best Selling Products
+        
         </h2>
         <Vitamins/>
       </section>
@@ -80,7 +74,7 @@ const OffersWrapper = () => {
      {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Heart and Cardiovascular Section
+        
         </h2>
         <CVS />
       </section>
@@ -90,7 +84,7 @@ const OffersWrapper = () => {
      {/* Featured Grid Section */}
       <section aria-labelledby="featured-grid" className={styles.sectionAlt}>
         <h2 id="featured-grid" className={styles.title}>
-          Heart and Cardiovascular Section
+          
         </h2>
         <CVS />
       </section>
@@ -101,7 +95,7 @@ const OffersWrapper = () => {
         className={styles.sectionAlt}
       >
         <h2 id="therapeutic-use" className={styles.title}>
-          Respiratory system/ Breathing Section
+        
         </h2>
         <BeautyProducts />
       </section>
@@ -109,7 +103,7 @@ const OffersWrapper = () => {
             {/* Top Products Section */}
       <section aria-labelledby="top-products" className={styles.section}>
         <h2 id="top-products" className={styles.title}>
-          Musculosketal and Joints Drugs
+          
         </h2>
         <Shop />
       </section>
@@ -120,7 +114,7 @@ const OffersWrapper = () => {
         className={styles.sectionAlt}
       >
         <h2 id="therapeutic-use" className={styles.title}>
-          Digestive system Section
+        
         </h2>
         <ProductsWrapper />
       </section>
@@ -128,7 +122,7 @@ const OffersWrapper = () => {
       {/* Top Products Section */}
       <section aria-labelledby="top-products" className={styles.section}>
         <h2 id="top-products" className={styles.title}>
-          Renal/Kidney Drugs
+         
         </h2>
         <Renal />
       </section>
@@ -136,7 +130,7 @@ const OffersWrapper = () => {
       {/* Top Products Section */}
       <section aria-labelledby="top-products" className={styles.section}>
         <h2 id="top-products" className={styles.title}>
-          Nervous System Drugs
+         
         </h2>
         <CNS />
       </section>
@@ -146,7 +140,7 @@ const OffersWrapper = () => {
       {/* Top Products Section */}
       <section aria-labelledby="top-products" className={styles.section}>
         <h2 id="top-products" className={styles.title}>
-          Reproductive/Sexual Health Section
+         
         </h2>
         <GUT />
       </section>
@@ -154,7 +148,7 @@ const OffersWrapper = () => {
       {/* Single Product Section */}
       <section aria-labelledby="single-product" className={styles.section}>
         <h2 id="single-product" className={styles.title}>
-         Shop By Category
+        
         </h2>
         <ShopByCategory />
       </section>

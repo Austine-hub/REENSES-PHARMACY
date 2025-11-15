@@ -11,6 +11,7 @@ import Hero from "../components/hero/Hero";
 import ServiceGrid from "../services/ServicesGrid";
 import ProductCarousel from "../pages/ProductCarousel";
 import DiscountCards from "../services/DiscountCards";
+import Shop from "../components/Shop";
 
 // ===============================================================
 // 💤 Lazy Loaded Components (Non-Critical Sections)
@@ -41,6 +42,7 @@ const Home: FC = () => {
 
       <Suspense fallback={<LoadingFallback />}>
         <DiscountCards/>
+        <Shop/>
         <ServiceGrid />
         <ShopByCategory />
         <Offers1 />
