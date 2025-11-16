@@ -1,8 +1,8 @@
 // ==========================
-// TopBar.tsx — Refactored
+// TopBar.tsx — Refactored & Optimized
 // ==========================
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import {
   FaFacebookF,
   FaTwitter,
@@ -32,7 +32,7 @@ const ROTATION_INTERVAL = 4000; // 4 seconds
 // Promo Messages
 const PROMO_MESSAGES: PromoMessage[] = [
   { id: 1, text: "🎉 Flash Sale! Get 50% OFF on all products today only!" },
-  { id: 2, text: "🚚 Free shipping on orders over $50 - Limited time!" },
+  { id: 2, text: "🚚 Free shipping on orders over Ksh.5000 - Limited time!" },
   { id: 3, text: "⭐ New arrivals just dropped! Shop the latest collection now!" },
   { id: 4, text: "💰 Special offer: Buy 2 Get 1 Free on selected items!" },
 ];
@@ -45,19 +45,22 @@ const SOCIAL_ICONS: SocialIcon[] = [
   { icon: <FaLinkedinIn />, id: "linkedin", label: "LinkedIn" },
 ];
 
-const TopBar = memo(({ setIsVisible }: TopBarProps) => {
+const TopBar: React.FC<TopBarProps> = ({ setIsVisible }) => {
   const [currentPromoIndex, setCurrentPromoIndex] = useState(0);
+  const [isHiding, setIsHiding] = useState(false);
 
+  // Rotate promo messages
   useEffect(() => {
-    if (PROMO_MESSAGES.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentPromoIndex((prev) => (prev + 1) % PROMO_MESSAGES.length);
-      }, ROTATION_INTERVAL);
+    if (PROMO_MESSAGES.length <= 1) return;
 
-      return () => clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      setCurrentPromoIndex((prev) => (prev + 1) % PROMO_MESSAGES.length);
+    }, ROTATION_INTERVAL);
+
+    return () => clearInterval(interval);
   }, []);
 
+  // Handle social click
   const handleSocialClick = (platform: string) => {
     const urls: Record<string, string> = {
       facebook: "https://facebook.com",
@@ -65,12 +68,20 @@ const TopBar = memo(({ setIsVisible }: TopBarProps) => {
       instagram: "https://instagram.com",
       linkedin: "https://linkedin.com",
     };
-
     window.open(urls[platform], "_blank", "noopener,noreferrer");
   };
 
+  // Smooth hide animation
+  const handleClose = () => {
+    setIsHiding(true);
+    setTimeout(() => setIsVisible(false), 300); // match CSS transition duration
+  };
+
   return (
-    <div className={styles.topbarWrapper}>
+    <div
+      className={`${styles.topbarWrapper} ${isHiding ? styles.hide : ""}`}
+      style={{ zIndex: 6000 }}
+    >
       <div className={styles.topbar} role="banner">
         <div className={styles.container}>
           {/* Promo Messages */}
@@ -92,7 +103,10 @@ const TopBar = memo(({ setIsVisible }: TopBarProps) => {
           </div>
 
           {/* Social Icons */}
-          <nav className={styles.socialSection} aria-label="Social media links">
+          <nav
+            className={styles.socialSection}
+            aria-label="Social media links"
+          >
             {SOCIAL_ICONS.map((btn) => (
               <button
                 key={btn.id}
@@ -108,10 +122,11 @@ const TopBar = memo(({ setIsVisible }: TopBarProps) => {
 
           {/* Close Button */}
           <button
-            onClick={() => setIsVisible(false)}
+            onClick={handleClose}
             className={styles.closeButton}
             aria-label="Close announcement banner"
             type="button"
+            style={{ zIndex: 7000 }}
           >
             <IoMdClose aria-hidden="true" focusable="false" />
           </button>
@@ -129,7 +144,6 @@ const TopBar = memo(({ setIsVisible }: TopBarProps) => {
       </div>
     </div>
   );
-});
+};
 
-TopBar.displayName = "TopBar";
 export default TopBar;

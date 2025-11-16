@@ -22,6 +22,10 @@ import {
 } from 'react-icons/md';
 import styles from './Hero.module.css';
 
+
+import photo1 from '../../assets/consultation.png';
+import photo2 from '../../assets/consultation1.png';
+
 interface NavItem {
   icon: React.ReactNode;
   label: string;
@@ -45,32 +49,31 @@ const HeroSection: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const navItems: NavItem[] = [
-    { icon: <FaWind />, label: 'Allergies', path: '/allergies' },
-    { icon: <FaFlask />, label: 'Cosmetics', path: '/cosmetics' },
-    { icon: <FaThermometerHalf />, label: 'Cough, Cold, Fever', path: '/cough-cold-fever' },
-    { icon: <FaUtensils />, label: 'Dietary', path: '/dietary' },
-    { icon: <FaHeartbeat />, label: 'Health', path: '/health' },
-    { icon: <FaPills />, label: 'Medication', path: '/medication' },
-    { icon: <FaStethoscope />, label: 'Medicine', path: '/medicine' },
-    { icon: <FaTooth />, label: 'Mouth & Teeth', path: '/mouth-teeth' },
-    { icon: <FaAppleAlt />, label: 'Nutrition', path: '/nutrition' },
-    { icon: <FaWind />, label: 'Pollen Sneeze', path: '/pollen-sneeze' },
-    { icon: <FaShieldAlt />, label: 'Protection', path: '/protection' },
+    { icon: <FaFlask />, label: 'Cosmetics', path: 'categories/skin-care' },
+    { icon: <FaWind />, label: 'Sneeze', path: '/categories/home-healthcare' },
+    { icon: <FaShieldAlt />, label: 'Protection', path: '/products/equipment' },
+    { icon: <FaThermometerHalf />, label: 'Cough, Cold, Fever', path: "/conditions/flu" },
+    { icon: <FaUtensils />, label: 'Gut Health', path: '/system/git' },
+    { icon: <FaHeartbeat />, label: 'Heart Health', path: "/condition/heart" },
+    { icon: <FaPills />, label: 'OTC Medication', path: '/products/otc' },
+    { icon: <FaStethoscope />, label: 'Prescription Medicine', path: 'products/prescription' },
+    { icon: <FaTooth />, label: 'Mouth & Teeth', path: 'conditions/oral-hygiene' },
+    { icon: <FaAppleAlt />, label: 'Supplements', path: '/products/supplements' },
   ];
 
 const carouselSlides: CarouselSlide[] = [
-  {
-    id: 1,
-    badge: 'Exclusive Discounts',
-    title: 'Magical Moments Awaits You at Every Corner',
-    subtitle: '',
-    description:
-      'We Turn Ordinary Days Into Magical Adventures with Our Exciting Collection of Toys and Stylish Kidswear',
-    buttonText: 'View Products',
-    image:
-      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80',
-    link: '/offers-wrapper'          // ⭐ Add this
-  },
+{
+  id: 1,
+  badge: 'Exclusive Health Deals',
+  title: 'Wellness & Care, Tailored for You',
+  subtitle: '',
+  description:
+    'Discover premium healthcare products, essential medicines, and wellness solutions that keep you and your family healthy every day.',
+  buttonText: 'Shop Now',
+  image: photo1,
+  link: '/offers' // ⭐ Add this
+},
+
   {
     id: 2,
     badge: 'New Arrivals',
@@ -81,7 +84,7 @@ const carouselSlides: CarouselSlide[] = [
     buttonText: 'Shop Now',
     image:
       'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
-    link: '/health-products'   // ⭐ Add this
+    link: '/new-arrivals'   // ⭐ Add this
   },
   {
     id: 3,
@@ -91,9 +94,8 @@ const carouselSlides: CarouselSlide[] = [
     description:
       'Professional Medical Solutions and Personalized Healthcare Services at Your Fingertips',
     buttonText: 'Explore More',
-    image:
-      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&q=80',
-    link: '/medical-services'  // ⭐ Add this
+    image: photo2,
+    link: '/trending'  // ⭐ Add this
   }
 ];
 

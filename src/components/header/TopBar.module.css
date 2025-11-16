@@ -1,25 +1,32 @@
-/* TopBar.module.css - Harmonized with Header */
+/* ==========================================================================
+   TopBar.module.css — Harmonized & Optimized
+   ========================================================================== */
 
 /* ==========================================================================
    TOPBAR WRAPPER - Fixed positioning at the very top
    ========================================================================== */
-
 .topbarWrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  z-index: var(--z-topbar, 1100);
+  z-index: 6000; /* Higher than overlays */
   background: linear-gradient(135deg, var(--color-primary, #0066cc) 0%, #0052a3 100%);
   color: var(--color-white, #ffffff);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Hiding animation */
+.topbarWrapper.hide {
+  transform: translateY(-100%);
 }
 
 /* ==========================================================================
    TOPBAR CONTENT
    ========================================================================== */
-
 .topbar {
   position: relative;
   width: 100%;
@@ -39,7 +46,6 @@
 /* ==========================================================================
    PROMO SECTION - Rotating messages
    ========================================================================== */
-
 .promoSection {
   flex: 1;
   overflow: hidden;
@@ -80,7 +86,6 @@
 /* ==========================================================================
    SOCIAL SECTION
    ========================================================================== */
-
 .socialSection {
   display: flex;
   align-items: center;
@@ -123,7 +128,6 @@
 /* ==========================================================================
    CLOSE BUTTON
    ========================================================================== */
-
 .closeButton {
   display: flex;
   align-items: center;
@@ -139,6 +143,7 @@
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
+  z-index: 7000; /* Above everything inside topbar */
 }
 
 .closeButton:hover {
@@ -159,7 +164,6 @@
 /* ==========================================================================
    PROGRESS BAR
    ========================================================================== */
-
 .progressBar {
   position: absolute;
   bottom: 0;
@@ -187,9 +191,8 @@
 }
 
 /* ==========================================================================
-   TABLET RESPONSIVE (1024px and below)
+   RESPONSIVE TABLET (1024px and below)
    ========================================================================== */
-
 @media (max-width: 1024px) {
   .container {
     padding: 0 1rem;
@@ -213,9 +216,8 @@
 }
 
 /* ==========================================================================
-   MOBILE RESPONSIVE (768px and below)
+   RESPONSIVE MOBILE (768px and below)
    ========================================================================== */
-
 @media (max-width: 768px) {
   .container {
     gap: 0.75rem;
@@ -251,7 +253,6 @@
 /* ==========================================================================
    SMALL MOBILE (480px and below)
    ========================================================================== */
-
 @media (max-width: 480px) {
   .container {
     gap: 0.5rem;
@@ -262,7 +263,6 @@
     font-size: 0.6875rem;
   }
 
-  /* Hide some social icons on very small screens */
   .socialIcon:nth-child(3),
   .socialIcon:nth-child(4) {
     display: none;
@@ -288,7 +288,6 @@
 /* ==========================================================================
    ACCESSIBILITY & USER PREFERENCES
    ========================================================================== */
-
 @media (prefers-reduced-motion: reduce) {
   .promoText,
   .socialIcon,
@@ -336,13 +335,4 @@
   .closeButton:hover {
     background: rgba(255, 255, 255, 0.25);
   }
-}
-
-/* ==========================================================================
-   UTILITY - Hide topbar
-   ========================================================================== */
-
-.topbarWrapper.hidden {
-  transform: translateY(-100%);
-  transition: transform 0.35s ease;
 }

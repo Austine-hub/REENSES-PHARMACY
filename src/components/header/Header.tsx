@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, memo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import styles from "./Header.module.css";
+import logoImage from "/logo.png";
 
 
 
@@ -90,7 +91,10 @@ const DropdownIcon = ({ isOpen }: { isOpen: boolean }) => (
 
 const Header = memo(
   ({
-    logo,
+    logo = {
+      src: logoImage,
+      alt: "Reenses Pharmacy Logo",
+      },
     brandName = "REENSES PHARMACY",
     brandSubtitle = "Your health, our priority",
     brandTagline = "Quality care for every family member",
