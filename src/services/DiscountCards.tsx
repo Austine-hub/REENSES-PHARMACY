@@ -3,40 +3,61 @@ import { Link } from 'react-router-dom';
 import styles from './DiscountCard.module.css';
 
 // Import images - replace with your actual image paths
-import toyImage from '../assets/toyHand.png';
-import vaccineImage from '../assets/vaccine.png';
-import styleImage from '../assets/style-fashion.png';
+import supplementsImage from '../assets/vitamin.png';
+import medicineImage from '../assets/omega.png';
+import oralCareImage from '../assets/oralcare.png';
+import consultationImage from '../assets/consultation.png';
+import skincareImage from '../assets/skincare.png';
 
 const DiscountCards: React.FC = () => {
-  const cards = [
-    {
-      id: 1,
-      badge: 'Exclusive Discount',
-      title: 'Playful Treasures for Happy Kids',
-      description: 'Where Every Toy Sparks Creativity and Every Outfit Brings Smiles',
-      image: toyImage,
-      bgColor: '#B8DFE6',
-      link: '/playful-treasures'
-    },
-    {
-      id: 2,
-      badge: 'Exclusive Discount',
-      title: 'Cheerful Finds for the Little Dreamer',
-      description: 'Explore a World of Playful Wonders and Delightful Finds for Every Child',
-      image: vaccineImage,
-      bgColor: '#D5D5D5',
-      link: '/cheerful-finds'
-    },
-    {
-      id: 3,
-      badge: 'Exclusive Discount',
-      title: 'Where Fun and Style Meet',
-      description: 'Discover the Perfect Mix of Fun, Learning, and Style for Your Little Ones',
-      image: styleImage,
-      bgColor: '#C8D9E4',
-      link: '/fun-and-style'
-    }
-  ];
+const cards = [
+  {
+    id: 1,
+    badge: 'Special Offer',
+    title: 'Daily Health Essentials',
+    description: 'Get all your everyday medicines, supplements, and health essentials delivered safely.',
+    image: medicineImage,  // Replace with your medicine image
+    bgColor: '#B8DFE6',
+    link: '/daily-health-essentials'
+  },
+  {
+    id: 2,
+    badge: 'Wellness Deals',
+    title: 'Oral Care & Dental Health',
+    description: 'Explore top-quality toothpaste, toothbrushes, and dental care products for the whole family.',
+    image: oralCareImage,  // Replace with a dental/oral care image
+    bgColor: '#D5D5D5',
+    link: '/system/oral-hygiene'
+  },
+  {
+    id: 3,
+    badge: 'Exclusive Offer',
+    title: 'Vitamins & Supplements',
+    description: 'Boost immunity and wellness with our curated range of vitamins and dietary supplements.',
+    image: supplementsImage,  // Replace with a supplements image
+    bgColor: '#C8D9E4',
+    link: '/vitamins-supplements'
+  },
+  {
+    id: 4,
+    badge: 'Healthcare Services',
+    title: 'Professional Health Consultations',
+    description: 'Book online consultations with certified pharmacists and healthcare professionals.',
+    image: consultationImage,  // Replace with consultation/doctor image
+    bgColor: '#E4C8D9',
+    link: '/contact-us'
+  },
+  {
+    id: 5,
+    badge: 'Wellness & Care',
+    title: 'Skincare & Personal Care',
+    description: 'Discover gentle and effective personal care and wellness products for everyday use.',
+    image: skincareImage,  // Replace with skincare/wellness image
+    bgColor: '#D9E4C8',
+    link: '/categories/skin-care'
+  }
+];
+
 
   return (
     <section className={styles.discountSection}>

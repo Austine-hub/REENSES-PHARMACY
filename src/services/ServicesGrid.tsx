@@ -1,15 +1,17 @@
-import React from 'react';
-import styles from './ServicesGrid.module.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import styles from "./ServicesGrid.module.css";
 
-// Import images - replace with your actual image paths
-import pic1  from '../assets/products/WomenHealth/women1.png';
-import pic2  from '../assets/mens/mens1.png';
-import pic3  from '../assets/mens/compounding.png';
-import pic4  from '../assets/mens/delivery.png';
-import pic5  from '../assets/mens/dermatology.png';
-import pic6  from '../assets/mens/pain.png';
-import pic7  from '../assets/mens/peads.png';
-// Icon components
+// Images
+import pic1 from "../assets/products/WomenHealth/women1.png";
+import pic2 from "../assets/mens/mens1.png";
+import pic3 from "../assets/mens/compounding.png";
+import pic4 from "../assets/mens/delivery.png";
+import pic5 from "../assets/mens/dermatology.png";
+import pic6 from "../assets/mens/pain.png";
+import pic7 from "../assets/mens/peads.png";
+
+// Icons
 const WomenHealthIcon = () => (
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <circle cx="12" cy="8" r="4" />
@@ -65,23 +67,25 @@ interface ServiceCardProps {
   icon: React.ReactNode;
   title: string;
   backgroundImage: string;
+  link: string;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, backgroundImage }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, backgroundImage, link }) => {
   return (
-    <article className={styles.card} style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <div className={styles.overlay}>
-        <div className={styles.content}>
-          <div className={styles.iconWrapper}>
-            {icon}
+    <Link to={link} className={styles.cardLink}>
+      <article className={styles.card} style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className={styles.overlay}>
+          <div className={styles.content}>
+            <div className={styles.iconWrapper}>{icon}</div>
+            <h3 className={styles.title}>{title}</h3>
+
+            <button className={styles.button} aria-label={`View details about ${title}`}>
+              View Details →
+            </button>
           </div>
-          <h3 className={styles.title}>{title}</h3>
-          <button className={styles.button} aria-label={`View details about ${title}`}>
-            View Details →
-          </button>
         </div>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 };
 
@@ -91,43 +95,50 @@ const ServicesGrid: React.FC = () => {
       icon: <WomenHealthIcon />,
       title: "Women's Health - Hormone Consultations",
       backgroundImage: pic1,
+      link: "/condition/women",
     },
     {
       icon: <MenHealthIcon />,
       title: "Men's Health",
       backgroundImage: pic2,
+      link: "/condition/men",
     },
     {
       icon: <CompoundingIcon />,
       title: "Compounding",
-      backgroundImage: pic3
+      backgroundImage: pic3,
+      link: "/services/compounding",
     },
     {
       icon: <DeliveryIcon />,
       title: "Prescription Delivery & Mail",
-      backgroundImage:pic4,
+      backgroundImage: pic4,
+      link: "/services/delivery",
     },
     {
       icon: <DermatologyIcon />,
       title: "Dermatology",
       backgroundImage: pic5,
+      link: "/services/derm/system/skin-treatment",
     },
-
     {
       icon: <PainManagementIcon />,
       title: "Pain Management",
       backgroundImage: pic6,
+      link: "/services/pain-management",
     },
     {
       icon: <PediatricsIcon />,
       title: "Pediatrics",
-      backgroundImage: pic7
-    }
+      backgroundImage: pic7,
+      link: "/services/pediatrics",
+    },
   ];
 
   return (
     <section className={styles.servicesSection} aria-labelledby="services-heading">
       <h2 id="services-heading" className={styles.visuallyHidden}>Our Services</h2>
+
       <div className={styles.grid}>
         {services.map((service, index) => (
           <ServiceCard
@@ -135,6 +146,7 @@ const ServicesGrid: React.FC = () => {
             icon={service.icon}
             title={service.title}
             backgroundImage={service.backgroundImage}
+            link={service.link}
           />
         ))}
       </div>
