@@ -1,8 +1,11 @@
-/* ========================================================================== */
-/*  CSS VARIABLES                                                             */
-/* ========================================================================== */
+/* Header.module.css - Optimized */
+
+/* ==========================================================================
+   CSS VARIABLES 
+   ========================================================================== */
 
 :root {
+  /* Colors */
   --color-primary: #0066cc;
   --color-primary-hover: #0052a3;
   --color-text: #1a1a1a;
@@ -13,63 +16,91 @@
   --color-white: #ffffff;
   --color-badge: #ff3b30;
 
+  /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-lg: -4px 0 16px rgba(0, 0, 0, 0.15);
 
+  /* Transitions */
   --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: 0.18s ease;
 
+  /* Sizing */
+  --topbar-height: 38px;
   --header-height: 80px;
   --header-height-mobile: 70px;
+  
+  /* Z-index scale */
+  --z-overlay: 1001;
+  --z-mobile-nav: 1002;
+  --z-logo-cart: 1003;
+  --z-hamburger: 1005;
+  --z-header: 1099;
+  --z-topbar: 1100;
 }
 
+/* ==========================================================================
+   BODY PADDING - Manages content offset for fixed header
+   ========================================================================== */
 
-/* Push main content below fixed header */
 body {
+  padding-top: calc(var(--topbar-height) + var(--header-height));
+  transition: padding-top 0.35s ease;
+}
+
+body.headerShiftUpActive {
   padding-top: var(--header-height);
 }
 
-/* Mobile/tablet adjustment */
-@media (max-width: 768px) {
-  body {
-    padding-top: var(--header-height-mobile);
-  }
-}
+/* ==========================================================================
+   HEADER WRAPPER - Fixed positioning with smooth transitions
+   ========================================================================== */
 
-/* ========================================================================== */
-/*  HEADER                                                                    */
-/* ========================================================================== */
-
-.header {
+.headerWrapper {
   position: fixed;
-  top: 0;
+  top: var(--topbar-height);
   left: 0;
   right: 0;
   width: 100%;
+  z-index: var(--z-header);
   background: var(--color-white);
   box-shadow: var(--shadow-sm);
-  z-index: 1000;
+  transition: top 0.35s ease;
+  will-change: top;
+}
+
+.headerShiftUp {
+  top: 0;
+}
+
+/* ==========================================================================
+   HEADER CONTENT
+   ========================================================================== */
+
+.header {
+  width: 100%;
+  background: var(--color-white);
+  position: relative;
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  min-height: var(--header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: var(--header-height);
- 
+  gap: 1rem;
 }
 
-/* ========================================================================== */
-/*  LOGO                                                                      */
-/* ========================================================================== */
+/* ==========================================================================
+   LOGO SECTION
+   ========================================================================== */
 
 .logoWrapper {
   flex-shrink: 0;
-  z-index: 1003;
+  z-index: var(--z-logo-cart);
 }
 
 .logoLink {
@@ -99,6 +130,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: var(--color-gray-50);
 }
 
 .logoImage {
@@ -120,6 +152,7 @@ body {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   color: var(--color-primary);
+  line-height: 1.1;
 }
 
 .logoSubtitle {
@@ -135,9 +168,9 @@ body {
   color: #666;
 }
 
-/* ========================================================================== */
-/*  NAVIGATION                                                                */
-/* ========================================================================== */
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
 
 .nav {
   flex: 1;
@@ -187,21 +220,27 @@ body {
 
 .dropdownToggle {
   width: 100%;
+  justify-content: space-between;
 }
+
+/* ==========================================================================
+   DROPDOWN ICON
+   ========================================================================== */
 
 .dropdownIcon {
-  font-size: 0.625rem;
+  width: 14px;
+  height: 14px;
   transition: transform var(--transition-base);
-  display: inline-block;
+  flex-shrink: 0;
 }
 
-.dropdownActive .dropdownIcon {
+.dropdownIconOpen {
   transform: rotate(180deg);
 }
 
-/* ========================================================================== */
-/*  DROPDOWN MENU                                                             */
-/* ========================================================================== */
+/* ==========================================================================
+   DROPDOWN MENU
+   ========================================================================== */
 
 .dropdownMenu {
   position: absolute;
@@ -221,12 +260,14 @@ body {
               visibility var(--transition-base),
               transform var(--transition-base);
   z-index: 100;
+  pointer-events: none;
 }
 
 .dropdownMenuOpen {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .dropdownItem {
@@ -255,15 +296,14 @@ body {
   outline-offset: -2px;
 }
 
-/* ========================================================================== */
-/*  CART                                                                      */
-/* ========================================================================== */
+/* ==========================================================================
+   CART
+   ========================================================================== */
 
 .cartWrapper {
   position: relative;
   flex-shrink: 0;
-  margin-left: 1rem;
-  z-index: 1003;
+  z-index: var(--z-logo-cart);
 }
 
 .cartLink {
@@ -314,14 +354,13 @@ body {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  pointer-events: none;
   box-shadow: 0 0 0 2px var(--color-white);
   z-index: 1;
 }
 
-/* ========================================================================== */
-/*  HAMBURGER                                                                 */
-/* ========================================================================== */
+/* ==========================================================================
+   HAMBURGER MENU
+   ========================================================================== */
 
 .hamburger {
   display: none;
@@ -331,9 +370,20 @@ body {
   border: none;
   background: transparent;
   cursor: pointer;
-  z-index: 1005;
+  z-index: var(--z-hamburger);
   flex-direction: column;
   justify-content: space-around;
+  transition: opacity var(--transition-fast);
+}
+
+.hamburger:hover {
+  opacity: 0.7;
+}
+
+.hamburger:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .hamburgerLine {
@@ -357,9 +407,9 @@ body {
   transform: translateY(-8.5px) rotate(-45deg);
 }
 
-/* ========================================================================== */
-/*  MOBILE OVERLAY                                                            */
-/* ========================================================================== */
+/* ==========================================================================
+   MOBILE OVERLAY
+   ========================================================================== */
 
 .overlay {
   position: fixed;
@@ -367,19 +417,24 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-overlay);
   animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(2px);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* ========================================================================== */
-/*  TABLET RESPONSIVE                                                         */
-/* ========================================================================== */
+/* ==========================================================================
+   TABLET RESPONSIVE (1024px and below)
+   ========================================================================== */
 
 @media (max-width: 1024px) {
   .navLink {
@@ -404,11 +459,20 @@ body {
   }
 }
 
-/* ========================================================================== */
-/*  MOBILE RESPONSIVE                                                         */
-/* ========================================================================== */
+/* ==========================================================================
+   MOBILE RESPONSIVE (768px and below)
+   ========================================================================== */
 
 @media (max-width: 768px) {
+  /* Adjust body padding for mobile */
+  body {
+    padding-top: calc(var(--topbar-height) + var(--header-height-mobile));
+  }
+
+  body.headerShiftUpActive {
+    padding-top: var(--header-height-mobile);
+  }
+
   .container {
     min-height: var(--header-height-mobile);
     padding: 1rem;
@@ -435,29 +499,43 @@ body {
     display: flex;
   }
 
+  /* Hide desktop cart on mobile */
+  .cartWrapper {
+    display: none;
+  }
+
+  /* Mobile Navigation Drawer */
   .nav {
     position: fixed;
-    top: 0;
+    top: calc(var(--topbar-height) + var(--header-height-mobile));
     right: 0;
-    height: 100vh;
+    height: calc(100vh - var(--topbar-height) - var(--header-height-mobile));
     width: 85%;
     max-width: 340px;
-    transform: translateX(100%);
-    transition: transform var(--transition-base);
     background: var(--color-white);
     box-shadow: var(--shadow-lg);
     overflow-y: auto;
-    z-index: 1002;
+    overflow-x: hidden;
+    z-index: var(--z-mobile-nav);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
   }
 
   .navOpen {
     transform: translateX(0);
   }
 
+  /* Adjust mobile nav when topbar is hidden */
+  .headerShiftUp ~ * .nav,
+  .headerWrapper.headerShiftUp + * .nav {
+    top: var(--header-height-mobile);
+    height: calc(100vh - var(--header-height-mobile));
+  }
+
   .navList {
     flex-direction: column;
     align-items: stretch;
-    padding: 5rem 0 2rem;
+    padding: 1rem 0 2rem;
     width: 100%;
     gap: 0;
   }
@@ -473,10 +551,7 @@ body {
     border-radius: 0;
   }
 
-  .cartWrapper {
-    display: none;
-  }
-
+  /* Mobile Dropdown Styles */
   .dropdownMenu {
     position: static;
     border-radius: 0;
@@ -489,10 +564,11 @@ body {
     transform: none;
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   .dropdownMenuOpen {
-    max-height: 480px;
+    max-height: 500px;
     padding: 0.5rem 0;
   }
 
@@ -506,9 +582,9 @@ body {
   }
 }
 
-/* ========================================================================== */
-/*  SMALL MOBILE                                                              */
-/* ========================================================================== */
+/* ==========================================================================
+   SMALL MOBILE (480px and below)
+   ========================================================================== */
 
 @media (max-width: 480px) {
   .container {
@@ -555,9 +631,9 @@ body {
   }
 }
 
-/* ========================================================================== */
-/*  ACCESSIBILITY                                                             */
-/* ========================================================================== */
+/* ==========================================================================
+   ACCESSIBILITY & USER PREFERENCES
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -575,21 +651,34 @@ body {
   .cartLink {
     border: 1px solid currentColor;
   }
+  
+  .headerWrapper {
+    border-bottom: 2px solid var(--color-text);
+  }
 }
 
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: #4da6ff;
+    --color-primary-hover: #66b3ff;
     --color-text: #e0e0e0;
     --color-text-light: #cccccc;
     --color-gray-50: #2a2a2a;
     --color-gray-100: #333333;
     --color-gray-200: #404040;
     --color-white: #1a1a1a;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: -4px 0 16px rgba(0, 0, 0, 0.5);
   }
 
-  .header {
+  .headerWrapper {
     background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+  
+  .overlay {
+    background: rgba(0, 0, 0, 0.7);
   }
 }
-

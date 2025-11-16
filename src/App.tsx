@@ -12,6 +12,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import appStyles from "./App.module.css";
 import Loader from "./components/Loader";
+import { useState } from "react";
 
 // Core layout (eager)
 import Header from "./components/header/Header";
@@ -23,6 +24,7 @@ import ProductCarousel from "./pages/ProductCarousel";
 import BeautyProducts from "./pages/BeautyProducts";
 import Diapers from "./promo/Diapers";
 import GlobalLoadingProvider from "./components/GlobalLoadingProvider";
+import TopBar from "./components/header/TopBar";
 
 // Lazy pages & route components
 const HomePage = lazy(() => import("./pages/Home"));
@@ -90,10 +92,15 @@ const DiabetesDetails = lazy(() => import("./productDetails/DiabetesDetails"));
 const RespiratoryDetails = lazy(() => import("./productDetails/RespiratoryDetails"));
 const HTNDetails = lazy(() => import("./productDetails/HTNDetails"));
 
+
+
+
 // ===============================================================
 // 🎨 Small, accessible loading fallback
 // ===============================================================
 const LoadingFallback: FC = memo(() => (
+
+  
   <div
     role="status"
     aria-live="polite"
@@ -183,6 +190,8 @@ NotFound.displayName = "NotFound";
 // 🏥 Root App
 // ===============================================================
 const App: FC = () => {
+
+    const [isTopbarVisible, setIsTopbarVisible] = useState(true);
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -193,7 +202,9 @@ const App: FC = () => {
           <Toaster position="top-center" duration={3000} closeButton richColors theme="light" />
 
           {/* Header (eager) */}
-          <Header />
+          <TopBar setIsVisible={setIsTopbarVisible} />
+          <Header isTopbarVisible={isTopbarVisible} />
+
 
           {/* Main */}
           <main className={appStyles.mainContent}>
